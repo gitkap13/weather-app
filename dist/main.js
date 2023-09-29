@@ -1,0 +1,1 @@
+!function(){function e(){return document.getElementById("location").value}document.getElementById("search").addEventListener("click",(()=>{console.log(e()),async function(e){try{const n=await fetch(`https://api.weatherapi.com/v1/current.json?key=bd5234cbc8544024ad6163623232509&q=${e}`);console.log(n.json())}catch(e){console.log(e)}}(e())}))}();
