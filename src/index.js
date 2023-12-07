@@ -10,15 +10,19 @@ import "./style.css";
       `http://api.weatherapi.com/v1/forecast.json?key=bd5234cbc8544024ad6163623232509&q=${document.getElementById("location").value}&days=3&aqi=no&alerts=no`
     );
     const weatherData = await response.json();
+    console.log('Weather data from api', weatherData)
     return weatherData;
   };
 
   async function createForecast(weather) {
     let forecast = document.getElementById('forecast');
-    console.log(forecast.hasChildNodes())
     while (forecast.hasChildNodes()) {
         forecast.removeChild(forecast.lastChild)
     }
+    let header = document.getElementById('location-header');
+    console.log(weather['location']['name'])
+    header.textContent = weather['location']['name'];
+    
     for (let i = 0; i < weather.forecast.forecastday.length; i++) {
         let day = weather.forecast.forecastday[i];
         let date = day.date;
@@ -26,7 +30,7 @@ import "./style.css";
         let maxTemp = day.day.maxtemp_f;
         let avgTemp = day.day.avgtemp_f;
         let avgHumidity = day.day.avghumidity;
-        let weatherArray = [`${date}`, `Min temperature: ${minTemp}`, `Max temperature: ${maxTemp}`, `Average temperature: ${avgTemp}`, `Humidity: ${avgHumidity}`]   
+        let weatherArray = [`${date}`, `Min temperature: ${minTemp}F`, `Max temperature: ${maxTemp}F`, `Average temperature: ${avgTemp}F`, `Humidity: ${avgHumidity}`]   
         let card = createWeatherCard(weatherArray);
         forecast.append(card);
 
@@ -50,12 +54,10 @@ import "./style.css";
     }
   }
   function createWeatherCard(...args) {
-    let forecast = document.getElementById('forecast');
     let card = document.createElement('div');
     card.setAttribute('class', 'card');
     for (let i = 0; i < args[0].length; i++) {
         let info = document.createElement('p');
-        console.log(args[0][i])
         info.innerText = args[0][i];
         card.appendChild(info);
     }
@@ -64,7 +66,6 @@ import "./style.css";
   }
   searchBtn.addEventListener("click", async () => {
     let weather = await getWeather();
-    console.log(weather);
     createForecast(weather);
   });
 })();
